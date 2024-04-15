@@ -1,0 +1,12 @@
+
+streamlit
+pandas
+matplotlib.pyplot
+re
+os
+seaborn
+warnings
+plotly.express
+plotly.graph_objects
+plotly.io
+numpy
