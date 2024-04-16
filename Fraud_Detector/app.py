@@ -18,7 +18,7 @@ from plotly.subplots import make_subplots
 st.set_page_config(
     page_title="Fraud Detector",
     page_icon="💳",
-    layout="wide"
+    layout="centered"
 )
 
 st.title("Fraud Detector")
@@ -27,23 +27,6 @@ st.markdown("""
             👋 Hello there!
             Welcome to this simple fraud detector app.
             """)
-
-# ### LOAD DATA
-# DATA_URL = ('../src/fraud test.csv')
-
-# def load_data(nrows):
-#     data = pd.read_csv(DATA_URL, nrows=nrows)
-#     return data
-
-# data_load_state = st.text('Loading data...')
-# N = 1000
-# data = load_data(N)
-# data_load_state.text("") # change text from "Loading data..." to "" once the the load_data function has run
-
-# ## Run the below code if the check is checked ✅
-# if st.checkbox('Show raw data'):
-#     st.subheader('Raw data')
-#     st.write(data) 
 
 ### LOAD MODEL
 def load_model():
@@ -55,8 +38,6 @@ def load_preprocessor():
     with open('preprocess.pkl', 'rb') as f:
         preprocessor = pickle.load(f)
     return preprocessor
-
-st.header("Fraud Detector")
 
 TEST_URL = ('test.csv')
 REAL_URL = ('test_sol.csv')
@@ -75,6 +56,27 @@ preprocessor = load_preprocessor()
 test = load_test()
 sol = load_sol()
 
+st.header("Formulaire")
+
+with st.form("transaction_form"):
+    st.write("Veuillez entrer le numéro de la transaction")
+    index = st.number_input("Identifiant de la transaction", min_value=0, max_value=len(test)-1, step=1)
+    submit = st.form_submit_button(label="Vérifier la fraude")
+    if submit:
+        line = test.iloc[index,:]
+        line_df = pd.DataFrame(line).T
+        st.write("Infos de la transaction :")
+        st.write(line_df)
+        line_pr = preprocessor.transform(line_df)
+        is_fraud = model.predict(line_pr)
+        st.write("Prédiction du modèle :")
+        if(is_fraud == 1):
+            st.write("FRAUDE DETECTEE !")
+        else:
+            st.write("Pas de fraude détectée")
+
+st.header("Statistiques")
+
 test_pr = preprocessor.transform(test)
 
 pred = model.predict(test_pr)
@@ -82,25 +84,10 @@ real = sol['is_fraud']
 
 # Matrice de confusion
 st.subheader('Matrice de confusion')
+plt.figure(figsize=(3, 3))
 fig, ax = plt.subplots()
 ConfusionMatrixDisplay.from_estimator(model, test_pr, real, ax=ax)
-st.pyplot(fig)
-
-# # Courbe ROC
-# st.subheader('Courbe ROC')
-# fig, ax = plt.subplots()
-# roc_curve(test_pr, real)
-# st.pyplot(fig)
-
-# Histogramme des prédictions
-# st.subheader('Histogramme des prédictions')
-# fig, ax = plt.subplots()
-# ax.hist(pred, bins=20, color='blue', alpha=0.7, label='Prédictions')
-# ax.hist(real, bins=20, color='red', alpha=0.7, label='Vrais résultats')
-# ax.set_xlabel('Classe')
-# ax.set_ylabel('Fréquence')
-# ax.legend(loc='upper right')
-# st.pyplot(fig)
+st.pyplot(fig, use_container_width=True)
 
 # Histogramme des prédictions
 st.subheader('Histogramme des prédictions')
@@ -108,11 +95,15 @@ pred_correct = (pred == real).astype(int)
 correct_count = np.sum(pred_correct)
 incorrect_count = len(pred_correct) - correct_count
 bardf = pd.DataFrame({
-    'Prédiction': ['Incorrect', 'Correct'],
-    'Fréquence': [incorrect_count, correct_count]
+    'Prédiction': ['Correct', 'Incorrect'],
+    'Fréquence': [correct_count, incorrect_count]
 })
+plt.figure(figsize=(3, 3))
 fig, ax = plt.subplots()
-ax.barh(bardf['Prédiction'], bardf['Fréquence'], color=['red', 'green'])
+bars = ax.bar(bardf['Prédiction'], bardf['Fréquence'], color=['green', 'red'])
+for bar in bars:
+    yval = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2, yval, yval, ha='center', va='bottom')
 ax.set_xlabel('Fréquence')
 ax.set_title('Prédictions')
-st.pyplot(fig)
+st.pyplot(fig, use_container_width=True)
