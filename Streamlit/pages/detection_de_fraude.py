@@ -10,7 +10,6 @@ from sklearn.preprocessing import OneHotEncoder
 from xgboost import XGBClassifier
 import io
 import pickle
-from plotly.subplots import make_subplots
 
 ### CONFIG
 st.set_page_config(
