@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get update \
     && apt-get install -y nano unzip curl
 
-RUN pip install boto3 pandas joblib gunicorn streamlit pydeck scikit-learn hdbscan matplotlib xgboost seaborn 
+RUN pip install boto3 pandas joblib gunicorn streamlit pydeck scikit-learn hdbscan matplotlib xgboost seaborn plotly
 
 COPY . /home/app
 

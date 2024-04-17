@@ -5,6 +5,7 @@ import pydeck as pdk
 import hdbscan
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.express as px
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, roc_curve, auc
 from sklearn.compose import ColumnTransformer
