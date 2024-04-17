@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.express as px
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay, roc_curve, auc
 from sklearn.compose import ColumnTransformer
@@ -103,3 +104,16 @@ for bar in bars:
 ax.set_xlabel('Fréquence')
 ax.set_title('Prédictions')
 st.pyplot(fig, use_container_width=True)
+
+st.subheader('Importance des features')
+feature_importance = pd.read_csv('feature_importance.csv')
+# Plot coefficients
+feature_importance = feature_importance.sort_values(by='Coefficient', ascending=True)
+fig = px.histogram(feature_importance, y='Feature', x='Coefficient')
+fig.update_layout(
+    showlegend=False, margin={"l": 120}, height=600,  # to avoid cropping of column names
+    xaxis_title_text='Coefficient', yaxis_title_text='Feature'
+)
+
+# Use Streamlit to display the figure
+st.plotly_chart(fig)
