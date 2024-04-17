@@ -19,4 +19,6 @@ RUN pip install boto3 pandas joblib gunicorn streamlit pydeck scikit-learn hdbsc
 COPY . /home/app
 
 # Exécutez l'application Streamlit sur le port 4000
-CMD ["streamlit", "run", "--server.port", "4000", "home.py"]
+#CMD ["streamlit", "run", "--server.port", "4000", "home.py"]
+# Executez l'application streamlit en ligne
+CMD streamlit run --server.port $PORT home.py

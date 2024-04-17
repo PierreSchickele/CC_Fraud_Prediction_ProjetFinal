@@ -28,22 +28,11 @@ st.title("Bienvenue sur notre application Streamlit")
 st.markdown("""
     Comment pouvons nous prédire des transactions victimes de fraudes à la carte bancaire ?
     Cette application présente le projet que nous avons fait pour Jedha.
-""")
 
-
-
-### SIDEBAR
-st.sidebar.header("Build dashboards with Streamlit")
-st.sidebar.markdown("""
-    * [EDA](#load-and-showcase-data)
-    * [Modèle de prédiction](#simple-bar-chart-built-directly-with-streamlit)
-    * [Modèle de clustering](#simple-bar-chart-built-with-plotly)
-    * [Input Data](#input-data)
-""")
-e = st.sidebar.empty()
-e.write("")
-st.sidebar.write("Made with 💖 by [Jedha](https://jedha.co)")
-
+    Nous avons fait le constat que la fraude par carte bleue était la fraude la plus fréquente en 2023. 
+    Nous nous sommes demandés comment on pourrait prédire le caractère frauduleux d'une transaction. Nous avons travaillé sur le dataset suivant :""")
+st.markdown("""https://www.kaggle.com/datasets/kelvinkelue/credit-card-fraud-prediction""")
+st.markdown("""Nous avons effectué des modèles de Machine Learning non supervisé et supervisé afin d'identifier les facteurs les plus pertinents dans la détection de fraude.""")
 # @st.cache_data
 # def load_data():
 #     data_cluster = joblib.load('data.joblib')

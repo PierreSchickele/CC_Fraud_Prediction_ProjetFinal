@@ -134,7 +134,7 @@ fraud_by_state_sorted = fraud_by_state.sort_values(by='is_fraud', ascending=Fals
 # Créer un graphique à barres pour visualiser la proportion des fraudes pour chaque État
 fig = px.bar(fraud_by_state_sorted, x='state', y='is_fraud', color='is_fraud',
              labels={'is_fraud': 'Proportion de fraudes', 'state': 'État'},
-             title='Top 10 des États par proportions de fraudes')
+             title='Top 10 des États par proportion de fraudes')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig, use_container_width=True)
@@ -144,7 +144,7 @@ st.plotly_chart(fig, use_container_width=True)
 fig = px.histogram(data, x="gender", color="is_fraud", barmode='group',
                    category_orders={"gender": data['gender'].value_counts().index.to_list()},
                    labels={'is_fraud': 'Fraude', 'gender': 'Genre'},
-                   title='Distribution de fraudes par genre')
+                   title='Distribution des fraudes par genre')
 
 # Ajouter les étiquettes de données sur chaque barre
 fig.update_traces(texttemplate='%{y}', textposition='outside')

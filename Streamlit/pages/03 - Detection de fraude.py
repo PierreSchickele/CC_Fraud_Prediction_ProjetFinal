@@ -18,7 +18,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("Fraud Detector")
+st.title("Détecteur de fraude")
 
 st.markdown("""
             👋 Bienvenue dans cette application de détections de fraudes !
