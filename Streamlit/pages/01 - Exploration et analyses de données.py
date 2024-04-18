@@ -23,15 +23,15 @@ st.write(data)
 # Viz 1 Top 10 des secteurs fraudés
 
 # Calculer le nombre total d'occurrences pour chaque secteur d'emploi
-total_by_sector = data['job_sector'].value_counts().reset_index()
-total_by_sector.columns = ['job_sector', 'total_occurrences']
+total_by_sector = data['category'].value_counts().reset_index()
+total_by_sector.columns = ['category', 'total_occurrences']
 
 # Calculer le nombre d'occurrences de fraudes par secteur d'emploi
-fraud_by_sector = data.groupby('job_sector')['is_fraud'].mean().reset_index()
-fraud_by_sector.columns = ['job_sector', 'fraud_proportion']
+fraud_by_sector = data.groupby('category')['is_fraud'].mean().reset_index()
+fraud_by_sector.columns = ['category', 'fraud_proportion']
 
 # Fusionner les deux DataFrames pour obtenir les proportions de fraudes et les totaux
-fraud_by_sector = pd.merge(fraud_by_sector, total_by_sector, on='job_sector')
+fraud_by_sector = pd.merge(fraud_by_sector, total_by_sector, on='category')
 
 # Sélectionner les 10 premiers secteurs par proportion de fraudes
 top_10_fraud_by_sector = fraud_by_sector.sort_values('fraud_proportion', ascending=False).head(10)
@@ -40,9 +40,9 @@ top_10_fraud_by_sector = fraud_by_sector.sort_values('fraud_proportion', ascendi
 top_10_fraud_by_sector = top_10_fraud_by_sector[::-1]
 
 # Créer le graphique avec Plotly Express
-fig = px.bar(top_10_fraud_by_sector, y='job_sector', x='fraud_proportion', color='fraud_proportion',
-            labels={'job_sector': "Secteur d'emploi", 'fraud_proportion': "Proportion de fraudes"},
-            title="Top 10 des secteurs d'emploi par proportion de fraudes",
+fig = px.bar(top_10_fraud_by_sector, y='category', x='fraud_proportion', color='fraud_proportion',
+            labels={'category': "Catégorie de transactions", 'fraud_proportion': " "},
+            title="Top 10 des catégories de transactions par proportion de fraudes",
             orientation='h')  # Orienté horizontalement
 
 # Afficher le graphique dans Streamlit
@@ -73,7 +73,7 @@ fraud_by_day_of_week = data.groupby('day_of_the_week')['is_fraud'].mean().reset_
 
 # Créer un graphique à barres pour visualiser la proportion des fraudes pour chaque jour de la semaine
 fig = px.bar(fraud_by_day_of_week, x='day_of_the_week', y='is_fraud', color='is_fraud',
-             labels={'is_fraud': 'Proportion de fraudes', 'day_of_the_week': 'Jour de la semaine'},
+             labels={'is_fraud': ' ', 'day_of_the_week': 'Jour de la semaine'},
              title='Proportion de fraudes par jour de la semaine')
 
 # Afficher le graphique dans Streamlit
@@ -104,7 +104,7 @@ fraud_by_month = data.groupby('month')['is_fraud'].mean().reset_index()
 
 # Créer un graphique à barres pour visualiser la proportion des fraudes pour chaque mois
 fig = px.bar(fraud_by_month, x='month', y='is_fraud', color='is_fraud',
-             labels={'is_fraud': 'Proportion de fraudes', 'month': 'Mois'},
+             labels={'is_fraud': ' ', 'month': 'Mois'},
              title='Proportion de fraudes par mois')
 
 # Afficher le graphique dans Streamlit
@@ -117,7 +117,7 @@ fraud_by_hour = data.groupby('hour')['is_fraud'].mean().reset_index().sort_value
 
 # Créer un graphique à barres pour visualiser la somme des fraudes pour chaque heure de la journée
 fig = px.bar(fraud_by_hour, x='hour', y='is_fraud', color='is_fraud',
-             labels={'is_fraud': 'Somme des fraudes', 'hour': 'Heure'},
+             labels={'is_fraud': ' ', 'hour': 'Heure'},
              title='Proportion de fraudes par heure de la journée')
 
 # Afficher le graphique dans Streamlit
@@ -133,7 +133,7 @@ fraud_by_state_sorted = fraud_by_state.sort_values(by='is_fraud', ascending=Fals
 
 # Créer un graphique à barres pour visualiser la proportion des fraudes pour chaque État
 fig = px.bar(fraud_by_state_sorted, x='state', y='is_fraud', color='is_fraud',
-             labels={'is_fraud': 'Proportion de fraudes', 'state': 'État'},
+             labels={'is_fraud': ' ', 'state': 'État'},
              title='Top 10 des États par proportion de fraudes')
 
 # Afficher le graphique dans Streamlit
@@ -141,13 +141,12 @@ st.plotly_chart(fig, use_container_width=True)
 
 # Viz 6
 
-fig = px.histogram(data, x="gender", color="is_fraud", barmode='group',
-                   category_orders={"gender": data['gender'].value_counts().index.to_list()},
-                   labels={'is_fraud': 'Fraude', 'gender': 'Genre'},
-                   title='Distribution des fraudes par genre')
+fraud_by_gender = data.groupby('gender')['is_fraud'].mean().reset_index()
 
-# Ajouter les étiquettes de données sur chaque barre
-fig.update_traces(texttemplate='%{y}', textposition='outside')
+fig = px.pie(fraud_by_gender, names='gender', values='is_fraud', 
+             category_orders={"gender": fraud_by_gender['gender'].index.to_list()},
+             labels={'is_fraud': ' ', 'gender': 'Genre'},
+             title='Répartition des victimes de fraudes par genre')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig, use_container_width=True)
@@ -157,7 +156,7 @@ st.plotly_chart(fig, use_container_width=True)
 data['is_fraud_label'] = data['is_fraud'].map({0: 'Transaction normale', 1: 'Transaction frauduleuse'})
 
 # Créer un graphique à boîtes avec les nouvelles étiquettes
-fig = px.box(data, x='amt', y='is_fraud_label')
+fig = px.box(data, x='amt', y='is_fraud_label', labels={'is_fraud': '', 'amt': 'Montant'})
 
 # Mettre à jour la mise en page
 fig.update_layout(
