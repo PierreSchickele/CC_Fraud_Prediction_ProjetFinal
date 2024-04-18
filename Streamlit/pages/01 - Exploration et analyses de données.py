@@ -41,7 +41,7 @@ top_10_fraud_by_sector = top_10_fraud_by_sector[::-1]
 
 # Créer le graphique avec Plotly Express
 fig = px.bar(top_10_fraud_by_sector, y='category', x='fraud_proportion', color='fraud_proportion',
-            labels={'category': "Catégorie de transactions", 'fraud_proportion': " "},
+            labels={'category': " ", 'fraud_proportion': "Proportion de fraude"},
             title="Top 10 des catégories de transactions par proportion de fraudes",
             orientation='h')  # Orienté horizontalement
 
@@ -156,7 +156,7 @@ st.plotly_chart(fig, use_container_width=True)
 data['is_fraud_label'] = data['is_fraud'].map({0: 'Transaction normale', 1: 'Transaction frauduleuse'})
 
 # Créer un graphique à boîtes avec les nouvelles étiquettes
-fig = px.box(data, x='amt', y='is_fraud_label', labels={'is_fraud': '', 'amt': 'Montant'})
+fig = px.box(data, x='amt', y='is_fraud_label', labels={'is_fraud_label': '   ', 'amt': 'Montant'})
 
 # Mettre à jour la mise en page
 fig.update_layout(
